@@ -1,4 +1,4 @@
-# 🏥 Sistema de Gestión Clínica - Arquitectura Microservicios
+# Sistema de Gestión Clínica - Arquitectura Microservicios
 
 Sistema integral de gestión clínica basado en Programación Orientada a Objetos (POO) y arquitectura de microservicios. Diseñado para clínicas pequeñas y medianas con capacidad de escalar a grandes volúmenes.
 
@@ -8,7 +8,7 @@ Sistema integral de gestión clínica basado en Programación Orientada a Objeto
 - Base de datos: MySQL 8.0
 - Orquestación: Docker + Docker Compose
 
-## 📋 Tabla de Contenidos
+## Tabla de Contenidos
 
 1. [Instalación](#instalación)
 2. [Estructura del Proyecto](#estructura-del-proyecto)
@@ -463,11 +463,11 @@ async def agendar_cita(
 ### Microservicios Independientes
 
 Cada servicio:
-- ✅ Tiene su propia BD MySQL
-- ✅ Implementa su dominio (Pacientes, Médicos, Citas)
-- ✅ Expone APIs REST
-- ✅ Puede escalarse independientemente
-- ✅ Se puede desplegar por separado
+- Tiene su propia BD MySQL
+- Implementa su dominio (Pacientes, Médicos, Citas)
+- Expone APIs REST
+- Puede escalarse independientemente
+- Se puede desplegar por separado
 
 ### Comunicación
 
@@ -574,7 +574,7 @@ DEBUG=True
 ENVIRONMENT=development
 ```
 
-⚠️ **Producción:** Cambiar `JWT_SECRET_KEY`, `DB_PASSWORD` y `ENVIRONMENT=production`.
+**Producción:** Cambiar `JWT_SECRET_KEY`, `DB_PASSWORD` y `ENVIRONMENT=production`.
 
 ---
 
@@ -707,7 +707,7 @@ docker-compose down
 docker-compose restart servicio_pacientes
 ```
 
-### Eliminar volúmenes (⚠️ borra datos)
+### Eliminar volúmenes (borra datos)
 
 ```bash
 docker-compose down -v
