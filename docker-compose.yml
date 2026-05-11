@@ -12,6 +12,7 @@ services:
       - "3306:3306"
     volumes:
       - mysql_data:/var/lib/mysql
+      - ./mysql/init:/docker-entrypoint-initdb.d:ro
     networks:
       - clinica-network
     healthcheck:
@@ -189,6 +190,12 @@ services:
       JWT_SECRET_KEY: ${JWT_SECRET_KEY:-clave-secreta-cambiar-en-produccion}
       JWT_ALGORITHM: ${JWT_ALGORITHM:-HS256}
       ORIGEN_FRONTEND: ${ORIGEN_FRONTEND:-http://localhost:3000}
+      SERVICIO_AUTENTICACION_URL: http://servicio_autenticacion:8001
+      SERVICIO_USUARIOS_URL: http://servicio_usuarios:8002
+      SERVICIO_PACIENTES_URL: http://servicio_pacientes:8003
+      SERVICIO_MEDICOS_URL: http://servicio_medicos:8004
+      SERVICIO_CITAS_URL: http://servicio_citas:8005
+      SERVICIO_HISTORIALES_URL: http://servicio_historiales:8006
       DEBUG: ${DEBUG:-True}
       ENVIRONMENT: ${ENVIRONMENT:-development}
     ports:

@@ -12,10 +12,14 @@ class App {
     inicializar() {
         this.autenticacion.verificarSesion();
         this.configurarEventos();
-        this.router.navegar('/');
+        this.router.navegar(this.router.obtenerRutaActual());
     }
 
     configurarEventos() {
+        window.addEventListener('hashchange', () => {
+            this.router.navegar(this.router.obtenerRutaActual());
+        });
+
         document.addEventListener('click', (e) => {
             if (e.target.matches('[data-nav]')) {
                 e.preventDefault();

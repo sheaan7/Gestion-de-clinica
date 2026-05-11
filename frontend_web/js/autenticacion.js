@@ -18,7 +18,7 @@ export class Autenticacion {
                 localStorage.setItem('token', respuesta.datos.token_acceso);
                 localStorage.setItem('usuario', JSON.stringify(respuesta.datos.usuario));
                 this.token = respuesta.datos.token_acceso;
-                window.location.href = '/dashboard';
+                window.location.hash = '/dashboard';
             } else {
                 Utils.mostrarError(respuesta.mensaje);
             }
@@ -45,15 +45,20 @@ export class Autenticacion {
 
     verificarSesion() {
         const token = localStorage.getItem('token');
-        if (!token && window.location.pathname !== '/login' && window.location.pathname !== '/') {
-            window.location.href = '/login';
+        const rutaActual = (window.location.hash || '#/').replace('#', '');
+        if (token && (rutaActual === '/login' || rutaActual === '/')) {
+            window.location.hash = '/dashboard';
+            return;
+        }
+        if (!token && rutaActual !== '/login' && rutaActual !== '/') {
+            window.location.hash = '/login';
         }
     }
 
     cerrarSesion() {
         localStorage.removeItem('token');
         localStorage.removeItem('usuario');
-        window.location.href = '/login';
+        window.location.hash = '/login';
     }
 
     obtenerUsuarioActual() {

@@ -5,8 +5,8 @@ WORKDIR /app
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY . .
+COPY . /app/servicio_pacientes
 
 EXPOSE 8003
 
-CMD ["python", "-m", "uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8003"]
+CMD ["python", "-m", "uvicorn", "servicio_pacientes.main:app", "--host", "0.0.0.0", "--port", "8003"]

@@ -42,3 +42,5 @@ node_modules/
 htmlcov/
 
 mysql_data/
+.claude/
+.claude
