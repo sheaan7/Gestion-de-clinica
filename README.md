@@ -737,6 +737,6 @@ MIT - Ver LICENSE
 
 ---
 
-**Última actualización:** 2024  
-**Versión:** 1.0.0  
-**Autor:** Sistema de Gestión Clínica
+
+**Versión:** 2.0.0  
+**Autor:** Jean Pierre Pérez Gomez
