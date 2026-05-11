@@ -1,0 +1,224 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: clinica-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root123}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-clinica}
+      TZ: 'America/Bogota'
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - clinica-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: clinica-phpmyadmin
+    environment:
+      PMA_HOST: mysql
+      PMA_USER: root
+      PMA_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root123}
+    ports:
+      - "8080:80"
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - clinica-network
+
+  servicio_autenticacion:
+    build:
+      context: ./servicio_autenticacion
+      dockerfile: Dockerfile
+    container_name: clinica-autenticacion
+    environment:
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_USER: ${DB_USER:-root}
+      DB_PASSWORD: ${DB_PASSWORD:-root123}
+      DB_NAME_AUTENTICACION: ${DB_NAME_AUTENTICACION:-auth_db}
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY:-clave-secreta-cambiar-en-produccion}
+      JWT_ALGORITHM: ${JWT_ALGORITHM:-HS256}
+      JWT_EXPIRATION_HOURS: ${JWT_EXPIRATION_HOURS:-24}
+      ORIGEN_FRONTEND: ${ORIGEN_FRONTEND:-http://localhost:3000}
+      DEBUG: ${DEBUG:-True}
+      ENVIRONMENT: ${ENVIRONMENT:-development}
+    ports:
+      - "8001:8001"
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - clinica-network
+
+  servicio_usuarios:
+    build:
+      context: ./servicio_usuarios
+      dockerfile: Dockerfile
+    container_name: clinica-usuarios
+    environment:
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_USER: ${DB_USER:-root}
+      DB_PASSWORD: ${DB_PASSWORD:-root123}
+      DB_NAME_USUARIOS: ${DB_NAME_USUARIOS:-usuarios_db}
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY:-clave-secreta-cambiar-en-produccion}
+      JWT_ALGORITHM: ${JWT_ALGORITHM:-HS256}
+      ORIGEN_FRONTEND: ${ORIGEN_FRONTEND:-http://localhost:3000}
+      DEBUG: ${DEBUG:-True}
+      ENVIRONMENT: ${ENVIRONMENT:-development}
+    ports:
+      - "8002:8002"
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - clinica-network
+
+  servicio_pacientes:
+    build:
+      context: ./servicio_pacientes
+      dockerfile: Dockerfile
+    container_name: clinica-pacientes
+    environment:
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_USER: ${DB_USER:-root}
+      DB_PASSWORD: ${DB_PASSWORD:-root123}
+      DB_NAME_PACIENTES: ${DB_NAME_PACIENTES:-pacientes_db}
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY:-clave-secreta-cambiar-en-produccion}
+      JWT_ALGORITHM: ${JWT_ALGORITHM:-HS256}
+      ORIGEN_FRONTEND: ${ORIGEN_FRONTEND:-http://localhost:3000}
+      DEBUG: ${DEBUG:-True}
+      ENVIRONMENT: ${ENVIRONMENT:-development}
+    ports:
+      - "8003:8003"
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - clinica-network
+
+  servicio_medicos:
+    build:
+      context: ./servicio_medicos
+      dockerfile: Dockerfile
+    container_name: clinica-medicos
+    environment:
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_USER: ${DB_USER:-root}
+      DB_PASSWORD: ${DB_PASSWORD:-root123}
+      DB_NAME_MEDICOS: ${DB_NAME_MEDICOS:-medicos_db}
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY:-clave-secreta-cambiar-en-produccion}
+      JWT_ALGORITHM: ${JWT_ALGORITHM:-HS256}
+      ORIGEN_FRONTEND: ${ORIGEN_FRONTEND:-http://localhost:3000}
+      DEBUG: ${DEBUG:-True}
+      ENVIRONMENT: ${ENVIRONMENT:-development}
+    ports:
+      - "8004:8004"
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - clinica-network
+
+  servicio_citas:
+    build:
+      context: ./servicio_citas
+      dockerfile: Dockerfile
+    container_name: clinica-citas
+    environment:
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_USER: ${DB_USER:-root}
+      DB_PASSWORD: ${DB_PASSWORD:-root123}
+      DB_NAME_CITAS: ${DB_NAME_CITAS:-citas_db}
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY:-clave-secreta-cambiar-en-produccion}
+      JWT_ALGORITHM: ${JWT_ALGORITHM:-HS256}
+      ORIGEN_FRONTEND: ${ORIGEN_FRONTEND:-http://localhost:3000}
+      DEBUG: ${DEBUG:-True}
+      ENVIRONMENT: ${ENVIRONMENT:-development}
+    ports:
+      - "8005:8005"
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - clinica-network
+
+  servicio_historiales:
+    build:
+      context: ./servicio_historiales
+      dockerfile: Dockerfile
+    container_name: clinica-historiales
+    environment:
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_USER: ${DB_USER:-root}
+      DB_PASSWORD: ${DB_PASSWORD:-root123}
+      DB_NAME_HISTORIALES: ${DB_NAME_HISTORIALES:-historiales_db}
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY:-clave-secreta-cambiar-en-produccion}
+      JWT_ALGORITHM: ${JWT_ALGORITHM:-HS256}
+      ORIGEN_FRONTEND: ${ORIGEN_FRONTEND:-http://localhost:3000}
+      DEBUG: ${DEBUG:-True}
+      ENVIRONMENT: ${ENVIRONMENT:-development}
+    ports:
+      - "8006:8006"
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - clinica-network
+
+  gateway_api:
+    build:
+      context: ./gateway_api
+      dockerfile: Dockerfile
+    container_name: clinica-gateway
+    environment:
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY:-clave-secreta-cambiar-en-produccion}
+      JWT_ALGORITHM: ${JWT_ALGORITHM:-HS256}
+      ORIGEN_FRONTEND: ${ORIGEN_FRONTEND:-http://localhost:3000}
+      DEBUG: ${DEBUG:-True}
+      ENVIRONMENT: ${ENVIRONMENT:-development}
+    ports:
+      - "8000:8000"
+    depends_on:
+      - servicio_autenticacion
+      - servicio_usuarios
+      - servicio_pacientes
+      - servicio_medicos
+      - servicio_citas
+      - servicio_historiales
+    networks:
+      - clinica-network
+
+  frontend_web:
+    build:
+      context: ./frontend_web
+      dockerfile: Dockerfile
+    container_name: clinica-frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - gateway_api
+    networks:
+      - clinica-network
+
+volumes:
+  mysql_data:
+    driver: local
+
+networks:
+  clinica-network:
+    driver: bridge

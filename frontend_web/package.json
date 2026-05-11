@@ -1,0 +1,13 @@
+{
+  "name": "clinica-frontend",
+  "version": "1.0.0",
+  "description": "Frontend SPA para sistema de gestión clínica",
+  "main": "js/app.js",
+  "scripts": {
+    "start": "python -m http.server 3000",
+    "dev": "python -m http.server 3000"
+  },
+  "keywords": ["clinica", "spa", "frontend"],
+  "author": "Equipo de desarrollo",
+  "license": "MIT"
+}
